@@ -14,8 +14,8 @@ public class Main {
     private static void initialize(UserService userService, TaskService taskService) throws IOException {
         Parser parser = new Parser();
 
-        List<User> users = parser.parseUsersCSV("src/resources/users.csv");
-        List<Task> tasks = parser.parseTasksCSV("src/resources/tasks.csv");
+        List<User> users = parser.parseUsersCSV("homework-2/src/resources/users.csv");
+        List<Task> tasks = parser.parseTasksCSV("homework-2/src/resources/tasks.csv");
 
         users.forEach(userService::addUser);
         tasks.forEach(taskService::addTask);

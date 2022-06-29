@@ -16,7 +16,7 @@ public class TaskService {
     }
 
     public void addTask(Task task) {
-        userService.registerTask(task);
+        userService.linkTask(task);
         tasksById.put(task.getId(), task);
     }
 
@@ -39,5 +39,18 @@ public class TaskService {
         catch (NoSuchElementException e) {
             throw e;
         }
+    }
+
+    public void createTask(){
+
+    }
+
+    public void deleteData() {
+
+    }
+
+    public void deleteTask(int taskId) {
+        userService.unlinkTask(getTaskById(taskId));
+        tasksById.remove(taskId);
     }
 }

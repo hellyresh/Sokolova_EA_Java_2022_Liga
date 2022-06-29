@@ -1,7 +1,4 @@
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -13,7 +10,7 @@ public class UserService {
         usersById.put(user.getId(), user);
     }
 
-    public void registerTask(Task task) {
+    public void linkTask(Task task) {
         getUserById(task.getUserId()).addTask(task);
     }
 
@@ -27,5 +24,9 @@ public class UserService {
             return user;
         }
         throw new NoSuchElementException(format("Пользователя с id = %d не существует", id));
+    }
+
+    public void unlinkTask(Task task) {
+        getUserById(task.getUserId()).getTasks().remove(task);
     }
 }

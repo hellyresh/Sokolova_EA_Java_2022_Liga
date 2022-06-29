@@ -6,8 +6,8 @@ import static java.lang.Integer.parseInt;
 
 public class UI {
 
-    private final UserService userService;
-    private final TaskService taskService;
+    private UserService userService;
+    private TaskService taskService;
 
     private final Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
 
@@ -24,10 +24,53 @@ public class UI {
                 case "1" -> showUsers();
                 case "2" -> showUserTasks();
                 case "3" -> changeTaskStatus();
-                case "4" -> isRunning = false;
+                case "4" -> createTask();
+                case "5" -> editTask();
+                case "6" -> deleteTask();
+                case "7" -> {
+                    deleteData();
+                    isRunning = false;
+                }
+                case "8" -> isRunning = false;
                 default -> System.out.println("\nВведите существующую команду\n");
             }
         }
+    }
+
+    private void deleteData() {
+        System.out.println("Введите 1, чтобы удалить все задачи и пользователей, " +
+                "введите любое другое значение, чтобы отменить");
+        if (scanner.nextLine().equals("1")) {
+            taskService = null;
+            userService = null;
+            System.gc();
+            System.out.println("\nДанные удалены\n");
+        }
+
+    }
+
+    private void deleteTask() {
+        System.out.println("\nВведите id задачи: ");
+        int taskId;
+        try {
+            taskId = parseInt(scanner.nextLine());
+            taskService.deleteTask(taskId);
+            System.out.println("Задача " + taskId + " удалена\n");
+        } catch (NumberFormatException e) {
+            System.out.println("Неверный формат ввода\n");
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage() + "\n");
+        }
+
+
+    }
+
+    private void editTask() {
+
+    }
+
+    private void createTask() {
+
     }
 
     public void showStartMenu() {
@@ -36,7 +79,11 @@ public class UI {
                 1. Показать список пользователей
                 2. Показать задачи пользователя
                 3. Сменить статус задачи
-                4. Завершить работу""");
+                4. Добавить новую задачу
+                5. Редактировать задачу
+                6. Удалить задачу
+                7. Удалить все задачи и пользователей
+                8. Завершить работу""");
     }
 
     public void showUsers() {

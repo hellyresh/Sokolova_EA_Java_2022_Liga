@@ -41,4 +41,6 @@ public class Task {
                 "дедлайн   \t" + deadline + "\n" +
                 "статус    \t" + status + "\n";
     }
+
+
 }

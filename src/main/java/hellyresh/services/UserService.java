@@ -1,9 +1,12 @@
-package main.java;
+package hellyresh.services;
 
-import main.java.model.Task;
-import main.java.model.User;
+import hellyresh.model.Task;
+import hellyresh.model.User;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 
@@ -16,7 +19,7 @@ public class UserService {
     }
 
     public void linkTask(Task task) {
-        getUserById(task.getUserId()).addTask(task);
+        getUserById(task.getUserId()).getTasks().add(task);
     }
 
     public Collection<User> getUsers() {

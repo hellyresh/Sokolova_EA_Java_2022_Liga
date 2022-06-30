@@ -1,6 +1,7 @@
-package main.java;
+package hellyresh.services;
 
-import main.java.model.Task;
+import hellyresh.model.Status;
+import hellyresh.model.Task;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -44,6 +45,7 @@ public class TaskService {
 
     public Task createTask(String header, String description, int userId, LocalDate deadLine)
             throws NoSuchElementException {
+
         userService.getUserById(userId);
         Task task = new Task(Collections.max(tasksById.keySet()) + 1, header, description, userId, deadLine);
         tasksById.put(task.getId(), task);
@@ -79,7 +81,7 @@ public class TaskService {
         task.setHeader(header);
     }
 
-    public Collection<Task> getTasks(){
+    public Collection<Task> getTasks() {
         return tasksById.values();
     }
 

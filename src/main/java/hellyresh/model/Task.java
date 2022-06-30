@@ -1,6 +1,4 @@
-package main.java.model;
-
-import main.java.Status;
+package hellyresh.model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -42,6 +40,10 @@ public class Task {
         return userId;
     }
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -59,17 +61,12 @@ public class Task {
                 "статус          \t" + status + "\n";
     }
 
-
     public void setHeader(String header) {
         this.header = header;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public void setDeadline(LocalDate deadline) {

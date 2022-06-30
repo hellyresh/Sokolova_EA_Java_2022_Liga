@@ -1,7 +1,8 @@
-package main.java;
+package hellyresh.csv;
 
-import main.java.model.Task;
-import main.java.model.User;
+import hellyresh.model.Status;
+import hellyresh.model.Task;
+import hellyresh.model.User;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +13,7 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-public class Parser {
+public class CsvParser {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
@@ -30,18 +31,9 @@ public class Parser {
                         it[1].trim(),
                         it[2].trim(),
                         parseInt(it[3].trim()),
-                        LocalDate.parse(it[4].trim(), formatter), it.length > 5 ? stringToStatus(it[5].trim()) : Status.NEW)
+                        LocalDate.parse(it[4].trim(), formatter),
+                        it.length > 5 ? Status.valueOf(it[5].trim().toUpperCase()) : Status.NEW)
                 )
                 .toList();
     }
-
-    public Status stringToStatus(String line) {
-        switch (line.toUpperCase()) {
-            case "NEW" -> {return Status.NEW;}
-            case "IN_PROCESS" -> {return Status.IN_PROCESS;}
-            case "DONE" -> {return Status.DONE;}
-            default -> {return null;}
-        }
-    }
-
 }

@@ -1,7 +1,10 @@
-package main.java;
+package hellyresh;
 
-import main.java.model.Task;
-import main.java.model.User;
+import hellyresh.csv.CsvParser;
+import hellyresh.model.Task;
+import hellyresh.model.User;
+import hellyresh.services.TaskService;
+import hellyresh.services.UserService;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -18,7 +21,7 @@ public class Main {
     }
 
     private static void initialize(UserService userService, TaskService taskService) throws IOException {
-        Parser parser = new Parser();
+        CsvParser parser = new CsvParser();
 
         List<User> users = parser.parseUsersCSV(Paths.get("src/main/resources/users.csv"));
         List<Task> tasks = parser.parseTasksCSV(Paths.get("src/main/resources/tasks.csv"));
@@ -26,7 +29,4 @@ public class Main {
         users.forEach(userService::addUser);
         tasks.forEach(taskService::addTask);
     }
-
-
-
 }

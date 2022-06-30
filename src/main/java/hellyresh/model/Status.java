@@ -1,9 +1,7 @@
-package main.java;
+package hellyresh.model;
 
 public enum Status {
     NEW,
     IN_PROCESS,
     DONE
-
-
 }

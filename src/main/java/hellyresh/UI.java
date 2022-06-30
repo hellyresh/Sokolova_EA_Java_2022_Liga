@@ -1,11 +1,15 @@
-package main.java;
+package hellyresh;
 
-import main.java.model.Task;
-import main.java.model.User;
+
+import hellyresh.csv.CsvWriter;
+import hellyresh.model.Status;
+import hellyresh.model.Task;
+import hellyresh.model.User;
+import hellyresh.services.TaskService;
+import hellyresh.services.UserService;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,16 +21,20 @@ import static java.lang.Integer.parseInt;
 
 public class UI {
 
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private final Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
     private UserService userService;
     private TaskService taskService;
-
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
-    private final Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
 
     UI(UserService userService, TaskService taskService) {
         this.userService = userService;
         this.taskService = taskService;
+    }
+
+    private static void saveData(UserService userService, TaskService taskService) throws IOException {
+        CsvWriter writer = new CsvWriter();
+        writer.saveUsersToCSV(userService.getUsers(), Paths.get("src/main/resources/users.csv"));
+        writer.saveTasksToCSV(taskService.getTasks(), Paths.get("src/main/resources/tasks.csv"));
     }
 
     public void runUI() throws IOException {
@@ -48,31 +56,27 @@ public class UI {
                 default -> System.out.println("\nВведите существующую команду\n");
             }
         }
-
     }
 
     private boolean closeUI() throws IOException {
         System.out.println("""                
-                        Выберите команду:
-                        1. Сохранить изменения
-                        2. Выйти без сохранения
-                        Введите любую другую команду, чтобы отменить
-                        """);
+                Выберите команду:
+                1. Сохранить изменения
+                2. Выйти без сохранения
+                Введите любую другую команду, чтобы отменить
+                """);
         switch (scanner.nextLine()) {
             case "1" -> {
                 saveData(userService, taskService);
                 return false;
             }
-            case "2" -> {return false;}
-            default -> {return true;}
+            case "2" -> {
+                return false;
+            }
+            default -> {
+                return true;
+            }
         }
-
-    }
-
-    private static void saveData(UserService userService, TaskService taskService) throws IOException {
-        WriterToCSV writer = new WriterToCSV();
-        writer.saveUsersToCSV(userService.getUsers(), Paths.get("src/main/resources/users.csv"));
-        writer.saveTasksToCSV(taskService.getTasks(), Paths.get("src/main/resources/tasks.csv"));
     }
 
     private void deleteTask() {
@@ -101,9 +105,7 @@ public class UI {
             userService.deleteAllUsers();
             System.out.println("\nДанные удалены\n");
         }
-
     }
-
 
 
     private void editTask() {
@@ -188,7 +190,7 @@ public class UI {
 
     public void showStartMenu() {
         System.out.println("""
-                
+                                
                 Введите номер команды:
                 1. Показать список пользователей
                 2. Показать задачи пользователя
@@ -210,12 +212,10 @@ public class UI {
         User user;
         try {
             user = userService.getUserById(parseInt(scanner.nextLine()));
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             System.out.println("Неверный формат ввода\n");
             return;
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             System.out.println(e.getMessage() + "\n");
             return;
         }
@@ -255,7 +255,9 @@ public class UI {
             case "1" -> taskService.updateTaskStatus(task, Status.NEW);
             case "2" -> taskService.updateTaskStatus(task, Status.IN_PROCESS);
             case "3" -> taskService.updateTaskStatus(task, Status.DONE);
-            default -> {return;}
+            default -> {
+                return;
+            }
         }
         System.out.println("Статус задачи установлен:");
     }

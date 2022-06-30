@@ -1,7 +1,7 @@
-package main.java.model;
+package hellyresh.model;
 
-import java.util.*;
-
+import java.util.HashSet;
+import java.util.Set;
 
 public class User {
 
@@ -24,10 +24,6 @@ public class User {
 
     public Set<Task> getTasks() {
         return tasks;
-    }
-
-    public void addTask(Task task) {
-        tasks.add(task);
     }
 
     public String toString() {

@@ -1,3 +1,5 @@
+package main.java.model;
+
 import java.util.*;
 
 
@@ -32,5 +34,8 @@ public class User {
         return id + "\t" + name;
     }
 
+    public String toCsvRow() {
+        return id + ", " + name + "\n";
+    }
 
 }

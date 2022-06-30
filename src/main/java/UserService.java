@@ -1,3 +1,8 @@
+package main.java;
+
+import main.java.model.Task;
+import main.java.model.User;
+
 import java.util.*;
 
 import static java.lang.String.format;
@@ -14,7 +19,7 @@ public class UserService {
         getUserById(task.getUserId()).addTask(task);
     }
 
-    public Collection<User> getAllUsers() {
+    public Collection<User> getUsers() {
         return usersById.values();
     }
 

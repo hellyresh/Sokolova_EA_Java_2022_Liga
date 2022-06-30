@@ -1,6 +1,11 @@
+package main.java;
+
+import main.java.model.Task;
+import main.java.model.User;
+
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -11,15 +16,15 @@ public class Parser {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    public List<User> parseUsersCSV(String filePath) throws IOException {
-        return Files.lines(Paths.get(filePath))
+    public List<User> parseUsersCSV(Path filePath) throws IOException {
+        return Files.lines(filePath)
                 .map(it -> it.split(","))
                 .map(it -> new User(parseInt(it[0]), it[1].trim()))
                 .toList();
     }
 
-    public List<Task> parseTasksCSV(String filePath) throws IOException {
-        return Files.lines(Paths.get(filePath))
+    public List<Task> parseTasksCSV(Path filePath) throws IOException {
+        return Files.lines(filePath)
                 .map(it -> it.split(","))
                 .map(it -> new Task(parseInt(it[0]),
                         it[1].trim(),
@@ -29,4 +34,5 @@ public class Parser {
                 )
                 .toList();
     }
+
 }

@@ -93,14 +93,12 @@ public class UI {
         }
     }
 
-    private void deleteData() throws IOException {
+    private void deleteData() {
         System.out.println("Введите 1, чтобы удалить все задачи и пользователей, " +
                 "введите любое другое значение, чтобы отменить");
         if (scanner.nextLine().equals("1")) {
-            taskService = null;
-            userService = null;
-            Files.writeString(Paths.get("src/main/resources/users.csv"), "");
-            Files.writeString(Paths.get("src/main/resources/tasks.csv"), "");
+            taskService.deleteAllTasks();
+            userService.deleteAllUsers();
             System.out.println("\nДанные удалены\n");
         }
 

@@ -34,4 +34,8 @@ public class UserService {
     public void unlinkTask(Task task) {
         getUserById(task.getUserId()).getTasks().remove(task);
     }
+
+    public void deleteAllUsers() {
+        usersById.clear();
+    }
 }

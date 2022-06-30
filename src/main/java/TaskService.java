@@ -15,7 +15,7 @@ public class TaskService {
 
     private final UserService userService;
 
-    private final Map<Integer, Task> tasksById = new HashMap<>();
+    private Map<Integer, Task> tasksById = new HashMap<>();
 
     public TaskService(UserService userService) {
         this.userService = userService;
@@ -81,5 +81,10 @@ public class TaskService {
 
     public Collection<Task> getTasks(){
         return tasksById.values();
+    }
+
+    //TODO:
+    public void deleteAllTasks() {
+        tasksById.clear();
     }
 }

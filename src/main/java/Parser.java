@@ -30,9 +30,18 @@ public class Parser {
                         it[1].trim(),
                         it[2].trim(),
                         parseInt(it[3].trim()),
-                        LocalDate.parse(it[4].trim(), formatter))
+                        LocalDate.parse(it[4].trim(), formatter), it.length > 5 ? stringToStatus(it[5].trim()) : Status.NEW)
                 )
                 .toList();
+    }
+
+    public Status stringToStatus(String line) {
+        switch (line.toUpperCase()) {
+            case "NEW" -> {return Status.NEW;}
+            case "IN_PROCESS" -> {return Status.IN_PROCESS;}
+            case "DONE" -> {return Status.DONE;}
+            default -> {return null;}
+        }
     }
 
 }

@@ -3,7 +3,10 @@ package main.java;
 import main.java.model.Task;
 import main.java.model.User;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -26,7 +29,7 @@ public class UI {
         this.taskService = taskService;
     }
 
-    public void runUI() {
+    public void runUI() throws IOException {
         boolean isRunning = true;
         while (isRunning) {
             showStartMenu();
@@ -38,13 +41,38 @@ public class UI {
                 case "5" -> deleteTask();
                 case "6" -> {
                     deleteData();
+                    saveData(userService, taskService);
                     isRunning = false;
                 }
-                case "7" -> isRunning = false;
+                case "7" -> isRunning = closeUI();
                 default -> System.out.println("\nВведите существующую команду\n");
             }
         }
 
+    }
+
+    private boolean closeUI() throws IOException {
+        System.out.println("""                
+                        Выберите команду:
+                        1. Сохранить изменения
+                        2. Выйти без сохранения
+                        Введите любую другую команду, чтобы отменить
+                        """);
+        switch (scanner.nextLine()) {
+            case "1" -> {
+                saveData(userService, taskService);
+                return false;
+            }
+            case "2" -> {return false;}
+            default -> {return true;}
+        }
+
+    }
+
+    private static void saveData(UserService userService, TaskService taskService) throws IOException {
+        WriterToCSV writer = new WriterToCSV();
+        writer.saveUsersToCSV(userService.getUsers(), Paths.get("src/main/resources/users.csv"));
+        writer.saveTasksToCSV(taskService.getTasks(), Paths.get("src/main/resources/tasks.csv"));
     }
 
     private void deleteTask() {
@@ -65,14 +93,14 @@ public class UI {
         }
     }
 
-    private void deleteData() {
+    private void deleteData() throws IOException {
         System.out.println("Введите 1, чтобы удалить все задачи и пользователей, " +
                 "введите любое другое значение, чтобы отменить");
         if (scanner.nextLine().equals("1")) {
-            //TODO: добавить удаление в файлах
             taskService = null;
             userService = null;
-            System.gc();
+            Files.writeString(Paths.get("src/main/resources/users.csv"), "");
+            Files.writeString(Paths.get("src/main/resources/tasks.csv"), "");
             System.out.println("\nДанные удалены\n");
         }
 

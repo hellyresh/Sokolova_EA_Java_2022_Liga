@@ -15,7 +15,6 @@ public class Main {
         initialize(userService, taskService);
         UI userInterface = new UI(userService, taskService);
         userInterface.runUI();
-        saveData(userService, taskService);
     }
 
     private static void initialize(UserService userService, TaskService taskService) throws IOException {
@@ -29,10 +28,5 @@ public class Main {
     }
 
 
-    private static void saveData(UserService userService, TaskService taskService) throws IOException {
-        //TODO переименовать метод (?)
-        WriterToCSV writer = new WriterToCSV();
-        writer.saveUsersToCSV(userService.getUsers(), Paths.get("src/main/resources/users.csv"));
-        writer.saveTasksToCSV(taskService.getTasks(), Paths.get("src/main/resources/tasks.csv"));
-    }
+
 }

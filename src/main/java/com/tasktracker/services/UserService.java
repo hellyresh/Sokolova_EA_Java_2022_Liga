@@ -1,15 +1,18 @@
-package hellyresh.services;
+package com.tasktracker.services;
 
-import hellyresh.model.Task;
-import hellyresh.model.User;
+import com.tasktracker.model.Status;
+import com.tasktracker.model.Task;
+import com.tasktracker.model.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
+@Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final Map<Integer, User> usersById = new HashMap<>();
@@ -32,6 +35,12 @@ public class UserService {
             return user;
         }
         throw new NoSuchElementException(format("Пользователя с id = %d не существует", id));
+    }
+
+    public Set<Task> getUserTasksByStatus(User user, Status status) {
+        return user.getTasks().stream()
+                .filter(t -> t.getStatus() == status)
+                .collect(Collectors.toSet());
     }
 
     public void unlinkTask(Task task) {

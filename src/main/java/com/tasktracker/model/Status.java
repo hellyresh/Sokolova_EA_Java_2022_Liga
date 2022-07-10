@@ -1,4 +1,4 @@
-package hellyresh.model;
+package com.tasktracker.model;
 
 public enum Status {
     NEW,

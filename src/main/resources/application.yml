@@ -1,0 +1,8 @@
+spring:
+  jackson:
+    serialization:
+      indent_output: true
+
+files:
+  users: "src/main/resources/users.csv"
+  tasks: "src/main/resources/tasks.csv"

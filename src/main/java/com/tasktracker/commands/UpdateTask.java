@@ -16,36 +16,39 @@ import static java.lang.Integer.parseInt;
 @AllArgsConstructor
 public class UpdateTask implements Command {
 
+    private final int TASK_ID_INDEX = 0;
+    private final int FIRST_FLAG_INDEX = 1;
+    private final int MIN_ARGS_COUNT = 2;
+    private final char FLAG_VALUE_DELIMITER = ' ';
+
     @Autowired
     private TaskService taskService;
 
     @Override
     public Object execute(List<String> args) {
-        if (args.size() < 2) {
+        if (args.size() < MIN_ARGS_COUNT) {
             return "Некорректное количество аргументов";
         }
         try {
-            Task task = taskService.getTaskById(parseInt(args.get(0)));
-            args.subList(1, args.size())
+            Task task = taskService.getTaskById(parseInt(args.get(TASK_ID_INDEX)));
+            args.subList(FIRST_FLAG_INDEX, args.size())
                     .forEach(field -> update(task, field));
             return task;
         } catch (NumberFormatException e) {
             return "Некорректный ввод команды";
         } catch (NoSuchElementException | IllegalArgumentException e) {
             return e.getMessage();
-        } catch (DateTimeParseException e) {
-            return "Ошибка ввода данных. Введите дату в формате: дд.мм.гггг";
         }
     }
 
     private void update(Task task, String field) {
 
-        int spaceInd = field.indexOf(' ');
+        int spaceInd = field.indexOf(FLAG_VALUE_DELIMITER);
         if (spaceInd == -1) {
             throw new IllegalArgumentException("Некорректный ввод команды, проверьте наличие флагов");
         }
         String flag = field.substring(0, spaceInd);
-        String value = field.substring(spaceInd + 1);
+        String value = field.substring(++spaceInd);
         switch (flag) {
             case "-h" -> taskService.updateTaskHeader(task, value);
             case "-d" -> taskService.updateTaskDescription(task, value);

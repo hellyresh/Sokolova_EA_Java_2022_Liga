@@ -15,20 +15,34 @@ import static java.lang.Integer.parseInt;
 @AllArgsConstructor
 public class CreateTask implements Command {
 
+    private final int HEADER_INDEX = 0;
+    private final int DESCRIPTION_INDEX = 1;
+    private final int USER_ID_INDEX = 2;
+    private final int DEADLINE_INDEX = 3;
+    private final int STATUS_INDEX = 4;
+    private final int MIN_ARGS_COUNT = 4;
+
     @Autowired
     private TaskService taskService;
 
     @Override
     public Object execute(List<String> args) {
-        if (args.size() < 4) {
+        if (args.size() < MIN_ARGS_COUNT) {
             return "Некорректное количество аргументов";
         }
 
         try {
-            if (args.size() <= 4)
-                return taskService.createTask(args.get(0), args.get(1), parseInt(args.get(2)), args.get(3));
+            if (args.size() == MIN_ARGS_COUNT)
+                return taskService.createTask(args.get(HEADER_INDEX),
+                        args.get(DESCRIPTION_INDEX),
+                        parseInt(args.get(USER_ID_INDEX)),
+                        args.get(DEADLINE_INDEX));
 
-            return taskService.createTask(args.get(0), args.get(1), parseInt(args.get(2)), args.get(3), args.get(4));
+            return taskService.createTask(args.get(HEADER_INDEX),
+                    args.get(DESCRIPTION_INDEX),
+                    parseInt(args.get(USER_ID_INDEX)),
+                    args.get(DEADLINE_INDEX),
+                    args.get(STATUS_INDEX));
 
         } catch (NoSuchElementException | IllegalArgumentException e) {
             return e.getMessage();

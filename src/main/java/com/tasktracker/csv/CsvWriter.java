@@ -2,17 +2,13 @@ package com.tasktracker.csv;
 
 import com.tasktracker.model.Task;
 import com.tasktracker.model.User;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
-@Component
 public class CsvWriter {
 
     public static void saveUsersToCSV(Collection<User> users, Path filePath) throws IOException {

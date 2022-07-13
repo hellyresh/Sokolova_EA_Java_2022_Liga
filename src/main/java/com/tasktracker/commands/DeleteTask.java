@@ -14,18 +14,22 @@ import static java.lang.Integer.parseInt;
 @AllArgsConstructor
 public class DeleteTask implements Command {
 
+    private final int ID_INDEX = 0;
+    private final int ARGS_COUNT = 1;
+
     @Autowired
     private TaskService taskService;
 
+
     @Override
     public String execute(List<String> args) {
-        if (args.size() != 1) {
+        if (args.size() != ARGS_COUNT) {
             return "Некорректное количество аргументов";
         }
 
         try {
-            taskService.deleteTaskById(parseInt(args.get(0)));
-            return "Задача с id " + args.get(0) + " успешно удалена.";
+            taskService.deleteTaskById(parseInt(args.get(ID_INDEX)));
+            return "Задача с id " + args.get(ID_INDEX) + " успешно удалена.";
         } catch (NoSuchElementException | IllegalArgumentException e) {
             return e.getMessage();
         }

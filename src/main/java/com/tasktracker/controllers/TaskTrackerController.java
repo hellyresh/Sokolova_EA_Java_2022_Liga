@@ -1,4 +1,4 @@
-package com.tasktracker;
+package com.tasktracker.controllers;
 
 import com.tasktracker.services.CommandRouter;
 import lombok.AllArgsConstructor;

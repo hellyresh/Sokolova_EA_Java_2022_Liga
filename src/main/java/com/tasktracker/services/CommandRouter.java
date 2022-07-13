@@ -4,6 +4,7 @@ import com.tasktracker.commands.Command;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,10 @@ import static java.util.Arrays.stream;
 @Service
 @AllArgsConstructor
 public class CommandRouter {
+
+    private final int COMMAND_INDEX = 0;
+    private final int FIRST_ARG_INDEX = 1;
+    private final String ARGS_DELIMITER = ",";
 
     @Autowired
     private List<Command> commandList;
@@ -27,8 +32,8 @@ public class CommandRouter {
     }
 
     public Object executeCommand(String command) {
-        List<String> args = stream(command.split(",")).map(String::trim).toList();
-        return commandMap.get(args.get(0).toLowerCase()).execute(args.subList(1, args.size()));
+        List<String> args = stream(command.split(ARGS_DELIMITER)).map(String::trim).toList();
+        return commandMap.get(args.get(COMMAND_INDEX).toLowerCase()).execute(args.subList(FIRST_ARG_INDEX, args.size()));
     }
 
 }

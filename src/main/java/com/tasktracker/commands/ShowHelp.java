@@ -5,13 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 
 @Component
 @AllArgsConstructor
 public class ShowHelp implements Command {
+
+    private final int COMMAND_INDEX = 0;
 
     @Autowired
     private List<Command> commandList;
@@ -32,7 +33,7 @@ public class ShowHelp implements Command {
                     .collect(joining("</br>", intro, ""));
         }
 
-        String commandTitle = args.get(0);
+        String commandTitle = args.get(COMMAND_INDEX);
         for (Command command : commandList) {
             if (command.getTitle().equals(commandTitle)) {
                 return command.getManual();

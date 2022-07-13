@@ -15,7 +15,7 @@ public class SaveData implements Command {
     private TaskService taskService;
 
     @Override
-    public String execute(List<String> args){
+    public String execute(List<String> args) {
         return taskService.saveData();
     }
 

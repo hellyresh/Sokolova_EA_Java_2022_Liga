@@ -15,22 +15,25 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 public class ShowUserTasks implements Command {
 
+    private final int USER_ID_INDEX = 0;
+    private final int STATUS_INDEX = 1;
+    private final int MIN_ARGS_COUNT = 1;
+
     @Autowired
     private UserService userService;
 
     @Override
     public Object execute(List<String> args) {
 
-        if (args.size() < 1) {
+        if (args.size() < MIN_ARGS_COUNT) {
             return "Некорректное количество аргументов";
         }
         try {
-            User user = userService.getUserById(Integer.parseInt((args.get(0))));
-            if (args.size() <= 1) {
+            User user = userService.getUserById(Integer.parseInt((args.get(USER_ID_INDEX))));
+            if (args.size() == MIN_ARGS_COUNT) {
                 return user.getTasks();
             }
-
-            Status status = Status.valueOf(args.get(1).toUpperCase());
+            Status status = Status.valueOf(args.get(STATUS_INDEX).toUpperCase());
             return userService.getUserTasksByStatus(user, status);
         } catch (NoSuchElementException | IllegalArgumentException e) {
             return e.getMessage();

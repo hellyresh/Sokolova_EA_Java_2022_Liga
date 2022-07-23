@@ -30,11 +30,14 @@ public class UserService {
     }
 
     public User getUserById(int id) {
-        User user = usersById.get(id);
-        if (user != null) {
-            return user;
+        if (!usersById.isEmpty()) {
+            User user = usersById.get(id);
+            if (user != null) {
+                return user;
+            }
+            throw new NoSuchElementException(format("Пользователя с id = %d не существует", id));
         }
-        throw new NoSuchElementException(format("Пользователя с id = %d не существует", id));
+        throw new NoSuchElementException("Список пользователей пуст");
     }
 
     public Set<Task> getUserTasksByStatus(User user, Status status) {

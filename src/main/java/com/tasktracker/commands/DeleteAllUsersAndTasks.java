@@ -20,13 +20,9 @@ public class DeleteAllUsersAndTasks implements Command {
 
     @Override
     public String execute(List<String> args) {
-        try {
-            taskService.deleteAllTasks();
-            userService.deleteAllUsers();
-            return "Данные удалены, чтобы очистить csv файлы не забудьте сохранить изменения.";
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+        taskService.deleteAllTasks();
+        userService.deleteAllUsers();
+        return "Данные удалены, чтобы очистить csv файлы не забудьте сохранить изменения.";
     }
 
     @Override

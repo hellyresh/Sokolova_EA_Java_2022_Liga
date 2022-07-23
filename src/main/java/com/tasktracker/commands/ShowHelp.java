@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Locale;
 
 import static java.util.stream.Collectors.joining;
 
@@ -35,7 +36,7 @@ public class ShowHelp implements Command {
 
         String commandTitle = args.get(COMMAND_INDEX);
         for (Command command : commandList) {
-            if (command.getTitle().equals(commandTitle)) {
+            if (command.getTitle().equals(commandTitle.toLowerCase())) {
                 return command.getManual();
             }
         }

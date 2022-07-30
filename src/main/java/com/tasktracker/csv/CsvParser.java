@@ -33,8 +33,6 @@ public class CsvParser {
     private static final String DELIMITER = ",";
 
 
-    private static UserService userService;
-
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     public static List<User> parseUsersCSV(Path filePath) throws IOException {

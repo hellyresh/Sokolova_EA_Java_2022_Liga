@@ -1,11 +1,11 @@
-package com.tasktracker.commands;
+package com.tasktracker.command;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 
-import com.tasktracker.services.TaskService;
-import com.tasktracker.services.UserService;
+import com.tasktracker.service.TaskService;
+import com.tasktracker.service.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,8 +28,6 @@ class CreateTaskTest {
     @MockBean
     private TaskService taskService;
 
-    @MockBean
-    private UserService userService;
 
 
     @Test
@@ -64,7 +62,7 @@ class CreateTaskTest {
     void execute_validArgs_createTaskMethodCalled() {
         createTask.execute(List.of("Header", "Description", "1", "01.01.2023"));
         verify(taskService)
-                .createTask(anyString(), anyString(), anyInt(), any(LocalDate.class));
+                .createTask(anyString(), anyString(), anyLong(), any(LocalDate.class));
     }
 
 }

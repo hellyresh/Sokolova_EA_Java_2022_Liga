@@ -1,7 +1,7 @@
-package com.tasktracker.commands;
+package com.tasktracker.command;
 
 
-import com.tasktracker.services.TaskService;
+import com.tasktracker.service.TaskService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +43,7 @@ class DeleteTaskTest {
     @DisplayName("Test valid arguments in command")
     void execute_validArgs_createTaskMethodCalled() {
         deleteTask.execute(List.of("1"));
-        verify(taskService).deleteTaskById(1);
+        verify(taskService).deleteTaskById(1L);
     }
 
 }

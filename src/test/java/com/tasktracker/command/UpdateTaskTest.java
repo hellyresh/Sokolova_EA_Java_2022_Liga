@@ -1,4 +1,4 @@
-package com.tasktracker.commands;
+package com.tasktracker.command;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -6,7 +6,8 @@ import static org.mockito.Mockito.*;
 
 import com.tasktracker.model.Status;
 import com.tasktracker.model.Task;
-import com.tasktracker.services.TaskService;
+import com.tasktracker.model.User;
+import com.tasktracker.service.TaskService;
 
 import java.time.LocalDate;
 
@@ -30,7 +31,7 @@ class UpdateTaskTest {
     @Autowired
     private UpdateTask updateTask;
 
-    private final Task task = new Task(1, "h", "d", 1,
+    private final Task task = new Task(1L, "h", "d", new User(),
             LocalDate.parse("2022-01-01"), Status.NEW);
 
 
@@ -74,19 +75,19 @@ class UpdateTaskTest {
     @Test
     @DisplayName("Test valid arguments in command")
     void execute_validArgs_updateMethodsCalled() {
-        when(taskService.getTaskById(anyInt())).thenReturn(task);
+        when(taskService.getTaskById(anyLong())).thenReturn(task);
         doNothing().when(taskService).updateTaskDeadline(any(Task.class), any(LocalDate.class));
         doNothing().when(taskService).updateTaskStatus(any(Task.class), any(Status.class));
         doNothing().when(taskService).updateTaskDescription(any(Task.class), anyString());
         doNothing().when(taskService).updateTaskHeader(any(Task.class), anyString());
-        doNothing().when(taskService).updateTasksUserId(any(Task.class), anyInt());
+        doNothing().when(taskService).updateTasksUserId(any(Task.class), anyLong());
         updateTask.execute(List.of("1", "-h Header", "-d Description", "-u 1", "-dl 21.01.2023", "-s in_process"));
-        verify(taskService).getTaskById(1);
+        verify(taskService).getTaskById(1L);
         verify(taskService).updateTaskDeadline(any(Task.class), any(LocalDate.class));
         verify(taskService).updateTaskStatus(any(Task.class), any(Status.class));
         verify(taskService).updateTaskDescription(any(Task.class), anyString());
         verify(taskService).updateTaskHeader(any(Task.class), anyString());
-        verify(taskService).updateTasksUserId(any(Task.class), anyInt());
+        verify(taskService).updateTasksUserId(any(Task.class), anyLong());
     }
 
 }

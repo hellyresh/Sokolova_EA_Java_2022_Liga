@@ -1,8 +1,8 @@
-package com.tasktracker.commands;
+package com.tasktracker.command;
 
 import static org.mockito.Mockito.*;
 
-import com.tasktracker.services.UserService;
+import com.tasktracker.service.UserService;
 
 import java.util.ArrayList;
 

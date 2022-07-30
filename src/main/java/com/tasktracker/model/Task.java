@@ -38,7 +38,7 @@ public class Task {
     @JsonIgnore
     private User user;
     @JsonGetter("userId")
-    private Long getUserId(){
+    public Long getUserId(){
         return user.getId();
     }
     @Column(name = "deadline")

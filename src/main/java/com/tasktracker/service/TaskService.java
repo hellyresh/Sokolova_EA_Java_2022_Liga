@@ -28,9 +28,6 @@ public class TaskService {
     private final UserService userService;
     @Autowired
     private TaskRepo taskRepo;
-
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
     @Value("${files.users}")
     private String usersFile;
     @Value("${files.tasks}")
@@ -65,33 +62,34 @@ public class TaskService {
                 .orElseThrow(() -> new NoSuchElementException(format("Задачи с id = %d не существует", id)));
     }
 
-    public void updateTaskStatus(Task task, String status) {
-        task.setStatus(Status.valueOf(status.toUpperCase()));
+    public void updateTaskStatus(Task task, Status status) {
+        task.setStatus(status);
+        taskRepo.save(task);
     }
 
-    public Task createTask(String header, String description, Long userId, String deadLine) {
-        return createTask(header, description, userId, deadLine, NEW.name());
+    public Task createTask(String header, String description, Long userId, LocalDate deadLine) {
+        return createTask(header, description, userId, deadLine, "new");
     }
 
-    public Task createTask(String header, String description, Long userId, String deadLine, String status) {
+    public Task createTask(String header, String description, Long userId, LocalDate deadLine, String status) {
         User user = userService.getUserById(userId);
         Task task = new Task();
         task.setHeader(header);
         task.setDescription(description);
-        task.setDeadLine(LocalDate.parse(deadLine, formatter));
-        task.setStatus(Status.valueOf(status.toUpperCase()));
+        task.setDeadLine(deadLine);
+        try {
+            task.setStatus(Status.valueOf(status));
+        } catch (NoSuchElementException e) {
+            throw new IllegalArgumentException("Ошибка ввода, статус может быть: new, in_process, done");
+        }
         task.setUser(user);
         taskRepo.save(task);
         return task;
     }
 
-    public void updateTaskDeadline(Task task, String deadline) {
-        try {
-            task.setDeadLine(LocalDate.parse(deadline, formatter));
-            taskRepo.save(task);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Ошибка ввода, введите дату в формате: дд.мм.гггг", e);
-        }
+    public void updateTaskDeadline(Task task, LocalDate deadline) {
+        task.setDeadLine(deadline);
+        taskRepo.save(task);
     }
 
     public void updateTasksUserId(Task task, Long userId) {

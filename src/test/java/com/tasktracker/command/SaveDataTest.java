@@ -1,10 +1,10 @@
-package com.tasktracker.commands;
+package com.tasktracker.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.tasktracker.services.TaskService;
+import com.tasktracker.service.TaskService;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,7 @@
-package com.tasktracker.services;
+package com.tasktracker.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.mock;
@@ -12,6 +13,7 @@ import com.tasktracker.model.Task;
 import com.tasktracker.model.User;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -36,20 +38,19 @@ class TaskServiceTest {
         taskService.deleteAllTasks();
     }
 
-    private final List<Task> taskList = List.of(new Task(0, "h", "d", 1,
+    private final List<Task> taskList = List.of(new Task(0L, "h", "d", new User(),
                     LocalDate.parse("2022-01-01"), Status.NEW),
-            new Task(1, "h", "d", 1,
+            new Task(1L, "h", "d", new User(),
                     LocalDate.parse("2023-01-01"), Status.NEW),
-            new Task(2, "h", "d", 1,
+            new Task(2L, "h", "d", new User(),
                     LocalDate.parse("2024-01-01"), Status.IN_PROCESS));
 
 
     @Test
     @DisplayName("Add valid task")
-    void addTask_validTask_taskAddedAndLinkMethodCalled() {
+    void addTask_validTask_taskAdded() {
         assertTrue(taskService.getTasks().isEmpty());
         taskService.addTask(taskList.get(0));
-        verify(userService).linkTask(any());
         assertEquals(1, taskService.getTasks().size());
         assertEquals(taskList.get(0), taskService.getTaskById(taskList.get(0).getId()));
     }
@@ -84,7 +85,7 @@ class TaskServiceTest {
     @Test
     @DisplayName("Test getTasks() with nonexistent task id")
     void getTaskById_nonexistentTaskId_exceptionThrown() {
-        assertThrows(NoSuchElementException.class, () -> (taskService).getTaskById(5));
+        assertThrows(NoSuchElementException.class, () -> (taskService).getTaskById(5L));
     }
 
 
@@ -94,7 +95,7 @@ class TaskServiceTest {
         for (Task task : taskList) {
             taskService.addTask(task);
         }
-        assertEquals(taskList.get(0), taskService.getTaskById(0));
+        assertEquals(taskList.get(0), taskService.getTaskById(0L));
     }
 
 
@@ -121,7 +122,7 @@ class TaskServiceTest {
     void createTask_validArgsWithStatus_validTask() {
         Task task = taskList.get(2);
         Task createdTask = taskService.createTask(task.getHeader(), task.getDescription(), task.getUserId(),
-                task.getDeadLine(), task.getStatus());
+                task.getDeadLine(), task.getStatus().toString());
         assertEquals(task.getDeadLine(), createdTask.getDeadLine());
         assertEquals(task.getDescription(), createdTask.getDescription());
         assertEquals(task.getHeader(), createdTask.getHeader());
@@ -148,7 +149,7 @@ class TaskServiceTest {
         Task task = taskList.get(2);
         taskService.createTask(task.getHeader(), task.getDescription(), task.getUserId(),
                 task.getDeadLine());
-        verify(userService).getUserById(anyInt());
+        verify(userService).getUserById(anyLong());
     }
 
     @Test
@@ -182,15 +183,16 @@ class TaskServiceTest {
     void updateTasksUserId_nonexistentUserId_exceptionThrown() {
         TaskService taskService = new TaskService(new UserService());
         Task task = taskList.get(0);
-        assertThrows(NoSuchElementException.class, () -> taskService.updateTasksUserId(task, 1));
+        assertThrows(NoSuchElementException.class, () -> taskService.updateTasksUserId(task, 1L));
     }
 
     @Test
     @DisplayName("Test updateTasksUserId() with existent user id")
     void updateTasksUserId_existentUserId_validUserId() {
-        when(userService.getUserById(anyInt())).thenReturn(new User(5, "Name"));
+        User user = new User(5L, "Name", new HashSet<>());
+        when(userService.getUserById(anyLong())).thenReturn(user);
         Task task = taskList.get(0);
-        taskService.updateTasksUserId(task, 5);
+        taskService.updateTasksUserId(task, 5L);
         assertEquals(5, task.getUserId());
     }
 
@@ -198,11 +200,9 @@ class TaskServiceTest {
     @DisplayName("Test calling set, get, link and unlink methods with valid user id")
     void updateTasksUserId_existentUserId_methodsCalled() {
         Task task = mock(Task.class);
-        taskService.updateTasksUserId(task, 5);
-        verify(task).setUserId(anyInt());
-        verify(userService).getUserById(anyInt());
-        verify(userService).linkTask(any());
-        verify(userService).unlinkTask(any());
+        taskService.updateTasksUserId(task, 5L);
+        verify(task).setUser(any());
+        verify(userService).getUserById(anyLong());
     }
 
     @Test
@@ -241,7 +241,7 @@ class TaskServiceTest {
     @Test
     @DisplayName("Test deleteTaskById() with nonexistent task id")
     void deleteTaskById_nonexistentTaskId_exceptionThrown() {
-        assertThrows(NoSuchElementException.class, () -> (taskService).deleteTaskById(1));
+        assertThrows(NoSuchElementException.class, () -> (taskService).deleteTaskById(1L));
     }
 
     @Test
@@ -252,8 +252,6 @@ class TaskServiceTest {
         assertFalse(taskService.getTasks().isEmpty());
         taskService.deleteTaskById(task.getId());
         assertTrue(taskService.getTasks().isEmpty());
-        verify(userService).linkTask(any());
-        verify(userService).unlinkTask(any());
     }
 
 

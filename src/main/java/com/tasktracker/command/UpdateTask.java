@@ -1,11 +1,14 @@
-package com.tasktracker.commands;
+package com.tasktracker.command;
 
+import com.tasktracker.model.Status;
 import com.tasktracker.model.Task;
 import com.tasktracker.service.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -21,6 +24,7 @@ public class UpdateTask implements Command {
     private final int FIRST_FLAG_INDEX = 1;
     private final int MIN_ARGS_COUNT = 2;
     private final char FLAG_VALUE_DELIMITER = ' ';
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @Autowired
     private TaskService taskService;

@@ -15,8 +15,9 @@ import static org.hibernate.FetchMode.JOIN;
 @Setter
 @AllArgsConstructor
 @Entity
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Table(name = "users")
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +30,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     @Fetch(FetchMode.JOIN)
     private Set<Task> tasks = new HashSet<>();
+
+
 
     public String toCsvRow() {
         return id + ", " + name + "\n";

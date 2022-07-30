@@ -1,10 +1,12 @@
 package com.tasktracker.command;
 
+import com.tasktracker.model.Status;
 import com.tasktracker.service.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -37,12 +39,12 @@ public class CreateTask implements Command {
                 return taskService.createTask(args.get(HEADER_INDEX),
                         args.get(DESCRIPTION_INDEX),
                         parseLong(args.get(USER_ID_INDEX)),
-                        args.get(DEADLINE_INDEX));
+                        LocalDate.parse(args.get(DEADLINE_INDEX)));
 
             return taskService.createTask(args.get(HEADER_INDEX),
                     args.get(DESCRIPTION_INDEX),
                     parseLong(args.get(USER_ID_INDEX)),
-                    args.get(DEADLINE_INDEX),
+                    LocalDate.parse(args.get(DEADLINE_INDEX)),
                     args.get(STATUS_INDEX));
 
         } catch (NoSuchElementException | IllegalArgumentException e) {

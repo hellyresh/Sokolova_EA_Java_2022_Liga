@@ -1,7 +1,8 @@
-package com.tasktracker.commands;
+package com.tasktracker.command;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,7 +10,7 @@ import static org.mockito.Mockito.when;
 import com.tasktracker.model.Status;
 import com.tasktracker.model.Task;
 import com.tasktracker.model.User;
-import com.tasktracker.services.UserService;
+import com.tasktracker.service.UserService;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -55,12 +56,13 @@ class ShowUserTasksTest {
     @Test
     @DisplayName("Test valid arguments in command")
     void execute_validArgs_getMethodsCalled() {
-        Task task = new Task(1, "h", "d", 1, LocalDate.parse("2022-01-01"), Status.NEW);
-        when(userService.getUserById(anyInt())).thenReturn(new User(1, "Name"));
+        User user = new User();
+        Task task = new Task(1L, "h", "d", user, LocalDate.parse("2022-01-01"), Status.NEW);
+        when(userService.getUserById(anyLong())).thenReturn(new User(1L, "Name", new HashSet<>()));
         when(userService.getUserTasksByStatus(any(User.class), any(Status.class)))
                         .thenReturn(Set.of(task));
         showUserTasks.execute(List.of("1", "new"));
-        verify(userService).getUserById(1);
+        verify(userService).getUserById(1L);
         verify(userService).getUserTasksByStatus(any(User.class), any(Status.class));
     }
 

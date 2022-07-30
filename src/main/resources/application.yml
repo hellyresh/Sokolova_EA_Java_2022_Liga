@@ -1,7 +1,18 @@
 spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   jackson:
     serialization:
       indent_output: true
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: sa
+    password:
 
 files:
   users: "src/main/resources/users.csv"

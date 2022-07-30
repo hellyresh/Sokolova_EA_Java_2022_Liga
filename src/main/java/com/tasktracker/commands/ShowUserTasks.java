@@ -12,6 +12,8 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static java.lang.Long.parseLong;
+
 @Component
 @AllArgsConstructor
 public class ShowUserTasks implements Command {
@@ -30,7 +32,7 @@ public class ShowUserTasks implements Command {
             throw new IndexOutOfBoundsException("Некорректное количество аргументов");
         }
         try {
-            User user = userService.getUserById(Integer.parseInt((args.get(USER_ID_INDEX))));
+            User user = userService.getUserById(parseLong((args.get(USER_ID_INDEX))));
             if (args.size() == MIN_ARGS_COUNT) {
                 return user.getTasks();
             }

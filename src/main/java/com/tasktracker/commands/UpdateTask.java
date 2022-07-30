@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
 
 @Component
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class UpdateTask implements Command {
             throw new IndexOutOfBoundsException("Некорректное количество аргументов");
         }
         try {
-            Task task = taskService.getTaskById(parseInt(args.get(TASK_ID_INDEX)));
+            Task task = taskService.getTaskById(parseLong(args.get(TASK_ID_INDEX)));
             args.subList(FIRST_FLAG_INDEX, args.size())
                     .forEach(field -> update(task, field));
             return task;
@@ -56,7 +57,7 @@ public class UpdateTask implements Command {
             case "-d" -> taskService.updateTaskDescription(task, value);
             case "-u" -> {
                 try {
-                    taskService.updateTasksUserId(task, parseInt(value));
+                    taskService.updateTasksUserId(task, parseLong(value));
                 } catch (NumberFormatException e) {
                     throw new IllegalArgumentException("Некорректный ввод, user id должен быть числом");
                 }

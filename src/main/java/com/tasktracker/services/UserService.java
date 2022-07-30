@@ -1,11 +1,18 @@
 package com.tasktracker.services;
 
+import com.tasktracker.csv.CsvParser;
 import com.tasktracker.model.Status;
 import com.tasktracker.model.Task;
 import com.tasktracker.model.User;
+import com.tasktracker.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,29 +22,23 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final Map<Integer, User> usersById = new HashMap<>();
+    @Autowired
+    private UserRepo userRepo;
+
 
     public void addUser(User user) {
-        usersById.put(user.getId(), user);
+        userRepo.save(user);
     }
 
-    public void linkTask(Task task) {
-        getUserById(task.getUserId()).getTasks().add(task);
-    }
 
     public Collection<User> getUsers() {
-        return usersById.values();
+        return userRepo.findAll();
     }
 
-    public User getUserById(int id) {
-        if (!usersById.isEmpty()) {
-            User user = usersById.get(id);
-            if (user != null) {
-                return user;
-            }
-            throw new NoSuchElementException(format("Пользователя с id = %d не существует", id));
-        }
-        throw new NoSuchElementException("Список пользователей пуст");
+    public User getUserById(Long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(format("Пользователя с id = %d не существует", id)));
+
     }
 
     public Set<Task> getUserTasksByStatus(User user, Status status) {
@@ -46,11 +47,8 @@ public class UserService {
                 .collect(Collectors.toSet());
     }
 
-    public void unlinkTask(Task task) {
-        getUserById(task.getUserId()).getTasks().remove(task);
-    }
 
     public void deleteAllUsers() {
-        usersById.clear();
+        userRepo.deleteAll();
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
 
 @Component
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class DeleteTask implements Command {
         }
 
         try {
-            taskService.deleteTaskById(parseInt(args.get(ID_INDEX)));
+            taskService.deleteTaskById(parseLong(args.get(ID_INDEX)));
             return "Задача с id " + args.get(ID_INDEX) + " успешно удалена.";
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Ошибка ввода данных. Значение task id должно быть числом");

@@ -24,15 +24,17 @@ public class DeleteTask implements Command {
     @Override
     public String execute(List<String> args) {
         if (args.size() != ARGS_COUNT) {
-            return "Некорректное количество аргументов";
+            throw new IndexOutOfBoundsException("Некорректное количество аргументов");
         }
 
         try {
             taskService.deleteTaskById(parseInt(args.get(ID_INDEX)));
             return "Задача с id " + args.get(ID_INDEX) + " успешно удалена.";
-        } catch (NoSuchElementException | IllegalArgumentException e) {
-            return e.getMessage();
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Ошибка ввода данных. Значение task id должно быть числом");
         }
+
+
     }
 
     @Override

@@ -28,7 +28,6 @@ public class TaskService {
 
     private final Map<Integer, Task> tasksById = new HashMap<>();
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @Value("${files.users}")
     private String usersFile;
@@ -57,42 +56,41 @@ public class TaskService {
     }
 
     public Task getTaskById(int id) {
-        Task task = tasksById.get(id);
-        if (task != null) {
-            return task;
+        if (!tasksById.isEmpty()) {
+            Task task = tasksById.get(id);
+            if (task != null) {
+                return task;
+            }
+            throw new NoSuchElementException(format("Задачи с id = %d не существует", id));
         }
-        throw new NoSuchElementException(format("Задачи с id = %d не существует", id));
+        throw new NoSuchElementException("Список задач пуст");
     }
 
-    public void updateTaskStatus(Task task, String status) {
-        task.setStatus(Status.valueOf(status.toUpperCase()));
+    public void updateTaskStatus(Task task, Status status) {
+        task.setStatus(status);
     }
 
-    public Task createTask(String header, String description, int userId, String deadLine) {
-        return createTask(header, description, userId, deadLine, NEW.name());
+    public Task createTask(String header, String description, int userId, LocalDate deadLine) {
+        return createTask(header, description, userId, deadLine, NEW);
     }
 
-    public Task createTask(String header, String description, int userId, String deadLine, String status)
-            throws NoSuchElementException {
+    public Task createTask(String header, String description, int userId, LocalDate deadLine, Status status) {
 
         userService.getUserById(userId);
 
-        Task task = new Task(Collections.max(tasksById.keySet()) + 1,
+        Task task = new Task(tasksById.isEmpty() ? 0 : Collections.max(tasksById.keySet()) + 1,
                 header,
                 description,
                 userId,
-                LocalDate.parse(deadLine, formatter),
-                Status.valueOf(status.toUpperCase()));
+                deadLine,
+                status);
         addTask(task);
         return task;
+
     }
 
-    public void updateTaskDeadline(Task task, String deadline) {
-        try {
-            task.setDeadLine(LocalDate.parse(deadline, formatter));
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Ошибка ввода, введите дату в формате: дд.мм.гггг", e);
-        }
+    public void updateTaskDeadline(Task task, LocalDate deadline) {
+        task.setDeadLine(deadline);
     }
 
     public void updateTasksUserId(Task task, int userId) throws NoSuchElementException {

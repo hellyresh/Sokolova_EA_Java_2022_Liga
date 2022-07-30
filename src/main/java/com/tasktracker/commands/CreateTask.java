@@ -1,10 +1,13 @@
 package com.tasktracker.commands;
 
+import com.tasktracker.model.Status;
 import com.tasktracker.services.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,13 +25,15 @@ public class CreateTask implements Command {
     private final int STATUS_INDEX = 4;
     private final int MIN_ARGS_COUNT = 4;
 
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
     @Autowired
     private TaskService taskService;
 
     @Override
     public Object execute(List<String> args) {
         if (args.size() < MIN_ARGS_COUNT) {
-            return "Некорректное количество аргументов";
+            throw new IndexOutOfBoundsException("Некорректное количество аргументов");
         }
 
         try {
@@ -36,18 +41,19 @@ public class CreateTask implements Command {
                 return taskService.createTask(args.get(HEADER_INDEX),
                         args.get(DESCRIPTION_INDEX),
                         parseInt(args.get(USER_ID_INDEX)),
-                        args.get(DEADLINE_INDEX));
+                        LocalDate.parse(args.get(DEADLINE_INDEX), formatter));
 
             return taskService.createTask(args.get(HEADER_INDEX),
                     args.get(DESCRIPTION_INDEX),
                     parseInt(args.get(USER_ID_INDEX)),
-                    args.get(DEADLINE_INDEX),
-                    args.get(STATUS_INDEX));
-
-        } catch (NoSuchElementException | IllegalArgumentException e) {
-            return e.getMessage();
+                    LocalDate.parse(args.get(DEADLINE_INDEX), formatter),
+                    Status.valueOf(args.get(STATUS_INDEX).toUpperCase()));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Ошибка ввода данных. Значение user id должно быть числом");
         } catch (DateTimeParseException e) {
-            return "Ошибка ввода данных. Введите дату в формате: дд.мм.гггг";
+            throw new IllegalArgumentException("Ошибка ввода, введите дату в формате: дд.мм.гггг");
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Ошибка ввода, статус может быть: new, in_process, done");
         }
     }
 

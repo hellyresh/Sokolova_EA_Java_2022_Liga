@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -26,7 +27,7 @@ public class ShowUserTasks implements Command {
     public Object execute(List<String> args) {
 
         if (args.size() < MIN_ARGS_COUNT) {
-            return "Некорректное количество аргументов";
+            throw new IndexOutOfBoundsException("Некорректное количество аргументов");
         }
         try {
             User user = userService.getUserById(Integer.parseInt((args.get(USER_ID_INDEX))));
@@ -35,8 +36,10 @@ public class ShowUserTasks implements Command {
             }
             Status status = Status.valueOf(args.get(STATUS_INDEX).toUpperCase());
             return userService.getUserTasksByStatus(user, status);
-        } catch (NoSuchElementException | IllegalArgumentException e) {
-            return e.getMessage();
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Ошибка ввода данных. Значение user id должно быть числом");
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Ошибка ввода, статус может быть: new, in_process, done");
         }
     }
 

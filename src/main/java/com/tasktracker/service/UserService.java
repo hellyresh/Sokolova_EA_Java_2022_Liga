@@ -1,18 +1,13 @@
-package com.tasktracker.services;
+package com.tasktracker.service;
 
-import com.tasktracker.csv.CsvParser;
 import com.tasktracker.model.Status;
 import com.tasktracker.model.Task;
 import com.tasktracker.model.User;
 import com.tasktracker.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,7 +26,7 @@ public class UserService {
     }
 
 
-    public Collection<User> getUsers() {
+    public List<User> getUsers() {
         return userRepo.findAll();
     }
 

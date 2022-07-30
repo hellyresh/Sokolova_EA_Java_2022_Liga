@@ -1,6 +1,6 @@
-package com.tasktracker.controllers;
+package com.tasktracker.controller;
 
-import com.tasktracker.services.CommandRouter;
+import com.tasktracker.service.CommandRouter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

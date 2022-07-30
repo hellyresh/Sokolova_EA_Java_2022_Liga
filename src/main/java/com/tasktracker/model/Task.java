@@ -1,6 +1,8 @@
 package com.tasktracker.model;
 
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,9 +35,12 @@ public class Task {
     @Column(name = "description")
     private String description;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Fetch(FetchMode.JOIN)
     @JsonIgnore
     private User user;
+    @JsonGetter("userId")
+    private Long getUserId(){
+        return user.getId();
+    }
     @Column(name = "deadline")
     private LocalDate deadLine;
     @Column(name = "status")

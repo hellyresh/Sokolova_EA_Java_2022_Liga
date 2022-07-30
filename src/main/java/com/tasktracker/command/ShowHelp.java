@@ -1,4 +1,4 @@
-package com.tasktracker.commands;
+package com.tasktracker.command;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.tasktracker.commands;
+package com.tasktracker.command;
 
 import org.springframework.stereotype.Component;
 

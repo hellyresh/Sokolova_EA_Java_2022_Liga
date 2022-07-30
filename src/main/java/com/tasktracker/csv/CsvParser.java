@@ -3,8 +3,7 @@ package com.tasktracker.csv;
 import com.tasktracker.model.Status;
 import com.tasktracker.model.Task;
 import com.tasktracker.model.User;
-import com.tasktracker.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tasktracker.service.UserService;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

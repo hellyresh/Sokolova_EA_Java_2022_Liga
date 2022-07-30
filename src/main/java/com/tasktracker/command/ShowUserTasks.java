@@ -1,9 +1,9 @@
-package com.tasktracker.commands;
+package com.tasktracker.command;
 
 
 import com.tasktracker.model.Status;
 import com.tasktracker.model.User;
-import com.tasktracker.services.UserService;
+import com.tasktracker.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.tasktracker.services;
+package com.tasktracker.service;
 
 import com.tasktracker.csv.CsvParser;
 import com.tasktracker.csv.CsvWriter;
@@ -81,7 +81,7 @@ public class TaskService {
         task.setDeadLine(LocalDate.parse(deadLine, formatter));
         task.setStatus(Status.valueOf(status.toUpperCase()));
         task.setUser(user);
-        addTask(task);
+        taskRepo.save(task);
         return task;
     }
 

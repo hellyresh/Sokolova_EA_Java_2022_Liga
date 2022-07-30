@@ -1,6 +1,6 @@
-package com.tasktracker.services;
+package com.tasktracker.service;
 
-import com.tasktracker.commands.Command;
+import com.tasktracker.command.Command;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +39,8 @@ public class CommandRouter {
             return commandMap.get(args.get(COMMAND_INDEX).toLowerCase()).execute(args.subList(FIRST_ARG_INDEX, args.size()));
         } catch (NoSuchElementException | IllegalArgumentException | IndexOutOfBoundsException e) {
             return e.getMessage();
+        } catch (NullPointerException e) {
+            return "Ошибка ввода команды";
         }
     }
 

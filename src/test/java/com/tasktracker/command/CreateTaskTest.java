@@ -3,6 +3,7 @@ package com.tasktracker.command;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.tasktracker.service.TaskService;
 import com.tasktracker.service.UserService;
@@ -36,12 +37,7 @@ class CreateTaskTest {
         assertThrows(IndexOutOfBoundsException.class, () -> createTask.execute(new ArrayList<>()));
     }
 
-    @Test
-    @DisplayName("Test invalid deadline in command")
-    void execute_invalidDeadline_exceptionThrown() {
-        assertThrows(IllegalArgumentException.class, () -> createTask
-                .execute(List.of("Header", "Description", "2", "invalid deadline", "in_process")));
-    }
+
 
     @Test
     @DisplayName("Test invalid user id in command")
@@ -50,19 +46,14 @@ class CreateTaskTest {
                 .execute(List.of("Header", "Description", "invalid id", "21.01.2023", "in_process")));
     }
 
-    @Test
-    @DisplayName("Test invalid status in command")
-    void execute_invalidStatus_exceptionThrown() {
-        assertThrows(IllegalArgumentException.class, () -> createTask
-                .execute(List.of("Header", "Description", "1", "21.01.2023", "invalid status")));
-    }
+
 
     @Test
     @DisplayName("Test valid arguments in command")
     void execute_validArgs_createTaskMethodCalled() {
         createTask.execute(List.of("Header", "Description", "1", "01.01.2023"));
         verify(taskService)
-                .createTask(anyString(), anyString(), anyLong(), any(LocalDate.class));
+                .createTask("Header", "Description", 1L, "01.01.2023");
     }
 
 }

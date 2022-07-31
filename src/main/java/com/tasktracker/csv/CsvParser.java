@@ -38,7 +38,7 @@ public class CsvParser {
     public static List<User> parseUsersCSV(Path filePath) throws IOException {
         try (Stream<String> lines = Files.lines(filePath)) {
             return lines.map(it -> it.split(DELIMITER))
-                    .map(it -> new User(parseLong(it[USER_ID_INDEX]), it[USER_NAME_INDEX].trim(), new HashSet<>()))
+                    .map(it -> new User(parseLong(it[USER_ID_INDEX]), it[USER_NAME_INDEX].trim()))
                     .toList();
         }
     }

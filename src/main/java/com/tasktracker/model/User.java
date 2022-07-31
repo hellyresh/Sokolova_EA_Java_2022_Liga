@@ -29,7 +29,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @Fetch(FetchMode.JOIN)
-    private Set<Task> tasks = new HashSet<>();
+    private final Set<Task> tasks = new HashSet<>();
 
 
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -36,7 +37,8 @@ public class CommandRouter {
     public Object executeCommand(String command) {
         try {
             List<String> args = stream(command.split(ARGS_DELIMITER)).map(String::trim).toList();
-            return commandMap.get(args.get(COMMAND_INDEX).toLowerCase()).execute(args.subList(FIRST_ARG_INDEX, args.size()));
+            return commandMap.get(args.get(COMMAND_INDEX).toLowerCase())
+                    .execute(args.subList(FIRST_ARG_INDEX, args.size()));
         } catch (NoSuchElementException | IllegalArgumentException | IndexOutOfBoundsException e) {
             return e.getMessage();
         } catch (NullPointerException e) {

@@ -32,7 +32,7 @@ public class UpdateTask implements Command {
     @Override
     public Object execute(List<String> args) {
         if (args.size() < MIN_ARGS_COUNT) {
-            return "Некорректное количество аргументов";
+            throw new IndexOutOfBoundsException("Некорректное количество аргументов");
         }
         try {
             Task task = taskService.getTaskById(parseLong(args.get(TASK_ID_INDEX)));

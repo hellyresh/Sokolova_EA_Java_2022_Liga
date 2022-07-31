@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -15,7 +16,6 @@ import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
 @Component
-@AllArgsConstructor
 public class CreateTask implements Command {
 
     private final int HEADER_INDEX = 0;
@@ -25,33 +25,29 @@ public class CreateTask implements Command {
     private final int STATUS_INDEX = 4;
     private final int MIN_ARGS_COUNT = 4;
 
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
+
+    public CreateTask(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @Override
     public Object execute(List<String> args) {
         if (args.size() < MIN_ARGS_COUNT) {
-            return "Некорректное количество аргументов";
+            throw new IndexOutOfBoundsException("Некорректное количество аргументов");
         }
 
-        try {
-            if (args.size() == MIN_ARGS_COUNT)
-                return taskService.createTask(args.get(HEADER_INDEX),
-                        args.get(DESCRIPTION_INDEX),
-                        parseLong(args.get(USER_ID_INDEX)),
-                        LocalDate.parse(args.get(DEADLINE_INDEX)));
-
+        if (args.size() == MIN_ARGS_COUNT)
             return taskService.createTask(args.get(HEADER_INDEX),
                     args.get(DESCRIPTION_INDEX),
                     parseLong(args.get(USER_ID_INDEX)),
-                    LocalDate.parse(args.get(DEADLINE_INDEX)),
-                    args.get(STATUS_INDEX));
+                    args.get(DEADLINE_INDEX));
 
-        } catch (NoSuchElementException | IllegalArgumentException e) {
-            return e.getMessage();
-        } catch (DateTimeParseException e) {
-            return "Ошибка ввода данных. Введите дату в формате: дд.мм.гггг";
-        }
+        return taskService.createTask(args.get(HEADER_INDEX),
+                args.get(DESCRIPTION_INDEX),
+                parseLong(args.get(USER_ID_INDEX)),
+                args.get(DEADLINE_INDEX),
+                args.get(STATUS_INDEX));
     }
 
     @Override

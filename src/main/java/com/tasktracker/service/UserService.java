@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,10 +18,15 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    public UserService(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
 
+
+    @Transactional
     public void addUser(User user) {
         userRepo.save(user);
     }
@@ -42,7 +48,7 @@ public class UserService {
                 .collect(Collectors.toSet());
     }
 
-
+    @Transactional
     public void deleteAllUsers() {
         userRepo.deleteAll();
     }

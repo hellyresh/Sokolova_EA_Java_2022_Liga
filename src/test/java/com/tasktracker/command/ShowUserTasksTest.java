@@ -58,7 +58,7 @@ class ShowUserTasksTest {
     void execute_validArgs_getMethodsCalled() {
         User user = new User();
         Task task = new Task(1L, "h", "d", user, LocalDate.parse("2022-01-01"), Status.NEW);
-        when(userService.getUserById(anyLong())).thenReturn(new User(1L, "Name", new HashSet<>()));
+        when(userService.getUserById(anyLong())).thenReturn(new User(1L, "Name"));
         when(userService.getUserTasksByStatus(any(User.class), any(Status.class)))
                         .thenReturn(Set.of(task));
         showUserTasks.execute(List.of("1", "new"));
